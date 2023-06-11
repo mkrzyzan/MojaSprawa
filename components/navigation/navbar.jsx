@@ -1,4 +1,5 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Link from "next/link";
 import styles from "../../styles/Navbar.module.css";
 export default function Navbar() {
 	return (
@@ -9,6 +10,10 @@ export default function Navbar() {
 					src="/alchemy_logo.svg"
 				></img>
 			</a>
+			
+			<h2><Link href="/crypto">crypto</Link></h2>
+			<h2><Link href="/nfts">NFTs</Link></h2>
+			<h2><Link href="/history">History</Link></h2>
 			<ConnectButton></ConnectButton>
 		</nav>
 	);
