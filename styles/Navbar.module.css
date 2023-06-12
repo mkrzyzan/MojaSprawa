@@ -1,5 +1,4 @@
 
-
 .navbar {
 	display: flex;
 	justify-content: space-between;
@@ -9,6 +8,12 @@
 	margin-bottom: 4rem;
 	color: white;
 	background-color: black;
+}
+
+@media screen and (max-width: 1000px) {
+	.navbar {
+		display: block;
+	}
 }
 
 .footer {
