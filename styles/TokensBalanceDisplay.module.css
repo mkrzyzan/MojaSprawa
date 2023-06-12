@@ -8,9 +8,14 @@
     border-radius: 12px;
     border: 1px solid #cfd9f0;
     padding: 2em;
-    height: 300px;
-    width: 420px;
-    overflow: scroll;
+    height: 80%;
+    width: 80%;
+    margin: 3rem auto auto;
+  }
+
+  .table_header {
+    display: flex;
+    justify-content: space-between;
   }
   
   .header {
@@ -68,4 +73,8 @@
   
   .coin_symbol {
     color: #4e4e4e;
+  }
+
+  .coin_name {
+    color: #929292
   }

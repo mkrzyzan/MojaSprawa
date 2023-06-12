@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   try {
     // fetch the token balances using the Alchemy SDK
     const fetchedTokens = await alchemy.core.getTokenBalances(address, {
-      type: TokenBalanceType.ERC20,
+      type: TokenBalanceType.DEFAULT_TOKENS,
     });
 
     // fetch the Ethereum balance for the given address

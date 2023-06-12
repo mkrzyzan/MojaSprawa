@@ -1,21 +1,27 @@
 import { useState, useEffect } from "react";
 import styles from "../styles/TokensBalanceDisplay.module.css";
+import { useAccount } from "wagmi";
 
 // Define TokensBalancePanel component
 export default function TokensBalancePanel({ walletAddress, chain }) {
   // Define state variables using the useState hook
   const [tokensBalance, setTokensBalance] = useState();
   const [isLoading, setIsloading] = useState(false);
-  const [address, setAddress] = useState();
+
+
+  const [myAddress, setMyAddress] = useState();
+  const { address, isDisconnected, isConnected } = useAccount();
+
+
   // Define function to get token balances
   const getBalance = async () => {
     setIsloading(true);
-    if (walletAddress) {
+    if (isConnected || walletAddress) {
       try {
         const fetchedTokensBalance = await fetch("/api/getTokensBalance", {
           method: "POST",
           body: JSON.stringify({
-            address: address,
+            address: isDisconnected ? walletAddress : myAddress,
             chain: chain ? chain : "ETH_MAINNET",
           }),
         }).then((res) => res.json());
@@ -29,27 +35,36 @@ export default function TokensBalancePanel({ walletAddress, chain }) {
 
   // Hydration error guard
   useEffect(() => {
-    if (walletAddress?.length) setAddress(walletAddress);
+    if (walletAddress?.length) setMyAddress(walletAddress);
   }, [walletAddress]);
 
   //   Fetch token balances when page loads
 
   useEffect(() => {
-    if (address) getBalance();
-  }, [address]);
+    if (myAddress) getBalance();
+  }, [myAddress]);
+
+    // This hook is used for setting the user's wallet address once it is available from wallet connect
+    useEffect(() => {
+        if (address?.length && isConnected) setMyAddress(address);
+      }, [address]);
 
   // Render TokensBalancePanel component
   return (
     <div className={styles.token_panel_container}>
       <div className={styles.tokens_box}>
-        {address?.length ? (
+        {myAddress?.length ? (
           <div className={styles.header}>
-            {address?.slice(0, 6)}...
-            {address?.slice(address.length - 4)}
+            {myAddress?.slice(0, 6)}...
+            {myAddress?.slice(myAddress.length - 4)}
           </div>
         ) : (
           ""
         )}
+        <div className={styles.table_header}>
+            <div>Asset</div>
+            <div>Balance</div>
+        </div>
 
         {isLoading
           ? "Loading..."
@@ -66,15 +81,18 @@ export default function TokensBalancePanel({ walletAddress, chain }) {
                     ) : (
                       <div className={styles.image_placeholder_container}></div>
                     )}
-                    <div className={styles.coin_name}>
-                      {token.name?.length > 15
-                        ? token.name?.substring(0, 15)
-                        : token.name}
+                    <div>
+                        <div className={styles.coin_symbol}>{token.symbol}</div>
+                        <div className={styles.coin_name}>
+                        {token.name?.length > 15
+                            ? token.name?.substring(0, 15)
+                            : token.name}
+                        </div>
                     </div>
                   </div>
                   <div className={styles.token_info}>
-                    <div className={styles.price}>{convertedBalance}</div>
-                    <div className={styles.coin_symbol}>{token.symbol}</div>
+                    <div className={styles.price}>{token.balance}</div>
+                    
                   </div>
                 </div>
               );

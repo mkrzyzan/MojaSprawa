@@ -7,6 +7,19 @@
 	padding: 2rem 4rem 0.8rem 4rem;
 	gap: 2rem;
 	margin-bottom: 4rem;
+	color: white;
+	background-color: black;
+}
+
+.footer {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	padding: 2rem 4rem 0.8rem 4rem;
+	gap: 2rem;
+	color: white;
+	margin-top: 4rem;
+	background-color: black;
 }
 
 

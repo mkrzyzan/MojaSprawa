@@ -6,17 +6,20 @@ export default function NFTGallery({}) {
   const [nfts, setNfts] = useState();
   const [walletOrCollectionAddress, setWalletOrCollectionAddress] =
     useState("vitalik.eth");
-  const [fetchMethod, setFetchMethod] = useState("wallet");
+  const [fetchMethod, setFetchMethod] = useState("connectedWallet");
   const [pageKey, setPageKey] = useState();
   const [spamFilter, setSpamFilter] = useState(true);
   const [isLoading, setIsloading] = useState(false);
   const { address, isConnected } = useAccount();
-  const [chain, setChain] = useState(process.env.NEXT_PUBLIC_ALCHEMY_NETWORK);
+  const [chain, setChain] = useState("ETH_MAINNET");
 
   const changeFetchMethod = (e) => {
     setNfts()
     setPageKey()
     switch (e.target.value) {
+      case "connectedWallet":
+        setWalletOrCollectionAddress(address);
+        break;
       case "wallet":
         setWalletOrCollectionAddress("vitalik.eth");
 
@@ -25,9 +28,6 @@ export default function NFTGallery({}) {
         setWalletOrCollectionAddress(
           "0x8a90CAb2b38dba80c64b7734e58Ee1dB38B8992e"
         );
-        break;
-      case "connectedWallet":
-        setWalletOrCollectionAddress(address);
         break;
     }
     setFetchMethod(e.target.value);
@@ -70,20 +70,26 @@ export default function NFTGallery({}) {
   };
 
   useEffect(() => {
-    fetchNFTs();
-  }, [fetchMethod]);
+    if (walletOrCollectionAddress?.length) fetchNFTs();
+  }, [walletOrCollectionAddress]);
+
+  useEffect(() => {
+    if (address?.length && isConnected) setWalletOrCollectionAddress(address);
+  }, [address])
+
   useEffect(() => {
     fetchNFTs();
   }, [spamFilter]);
 
   return (
     <div className={styles.nft_gallery_page}>
-      <div>
+
+      {/* <div>
         <div className={styles.fetch_selector_container}>
           <h2 style={{ fontSize: "20px" }}>Explore NFTs by</h2>
           <div className={styles.select_container}>
             <select
-              defaultValue={"wallet"}
+              defaultValue={"connectedWallet"}
               onChange={(e) => {
                 changeFetchMethod(e);
               }}
@@ -121,7 +127,7 @@ export default function NFTGallery({}) {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
 
       {isLoading ? (
