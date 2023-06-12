@@ -1,5 +1,5 @@
 import NFTGallery from "../components/nftGallery";
 
 export default function FirstPost() {
-    return <NFTGallery></NFTGallery>;
+    return <NFTGallery walletAddress={"vitalik.eth"}></NFTGallery>;
 }

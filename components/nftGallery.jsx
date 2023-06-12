@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "../styles/NftGallery.module.css";
 import { useAccount } from "wagmi";
 
-export default function NFTGallery({}) {
+export default function NFTGallery({walletAddress}) {
   const [nfts, setNfts] = useState();
   const [walletOrCollectionAddress, setWalletOrCollectionAddress] =
     useState("vitalik.eth");
@@ -42,10 +42,7 @@ export default function NFTGallery({}) {
       const res = await fetch(endpoint, {
         method: "POST",
         body: JSON.stringify({
-          address:
-            fetchMethod == "connectedWallet"
-              ? address
-              : walletOrCollectionAddress,
+          address: isConnected ? address : walletAddress,
           pageKey: pagekey ? pagekey : null,
           chain: chain,
           excludeFilter: spamFilter,
@@ -76,6 +73,10 @@ export default function NFTGallery({}) {
   useEffect(() => {
     if (address?.length && isConnected) setWalletOrCollectionAddress(address);
   }, [address])
+
+  useEffect(() => {
+    if (walletAddress?.length) setWalletOrCollectionAddress(walletAddress);
+  }, [walletAddress])
 
   useEffect(() => {
     fetchNFTs();
